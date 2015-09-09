@@ -1,7 +1,7 @@
 // Парсинг страниц розетки для извлечения доступной информации о товарах, в данном случае флешек.
 // Скрипт запускать с основной страницы категории http://rozetka.com.ua/usb-flash-memory/c80045/
 // Необходимо подождать несколько секунд пока подгрузятся все запросы с остальных страниц
-
+// upd. 09.09.15
 (function(){
 	'use strict'
 	var next = (function() {
@@ -31,18 +31,9 @@
 	var prodList = [];
 
 	function getMaxPage (){
-		var pagesWrapper = document.querySelector('.goods-pages-list');
-		var curEl, lastPage;
-		if (pagesWrapper) {
-			curEl = pagesWrapper.childNodes[pagesWrapper.childNodes.length-2];
-			if (next(curEl) !== false) {
-				curEl = next(curEl)
-			}
-			lastPage = curEl.id.replace('page','');
-		} else {
-			lastPage = 1;
-		}
-		return lastPage;
+		var paginatorEl = document.querySelectorAll('.paginator-catalog-l-link');
+		var lastPage = paginatorEl[paginatorEl.length-1].textContent;
+		return Number(lastPage);
 	}
 
 	function genUrl (curPage){
@@ -77,23 +68,19 @@
 
 
 	function getProdInf(node){
-		var prodWrapper = node.querySelectorAll('.gtile-i-wrap');
+		var prodWrapper = node.querySelectorAll('.g-i-tile-i-box-desc');
 
 		function getProdObj(prodNode) {
 			var oProd = {};
 			// information nodes
-			var nameNode = prodNode.querySelector('.gtile-i-title a');
+			var nameNode = prodNode.querySelector('.g-i-tile-i-title a');
 			var uahpriceNode = prodNode.querySelector('.g-price-uah');
-			var usdpriceNode = prodNode.querySelector('.g-price-usd');
 
 			oProd.url = nameNode.getAttribute('href');
 			oProd.name = nameNode.innerText.match(/\S+/g).join(' ');
 			oProd.storageCapacity = nameNode.innerText.match(/\d+/g)[0];
 			if (uahpriceNode) {
 				oProd.uahprice = uahpriceNode.innerText.replace(/([^0-9])/gi,'');
-			};
-			if (usdpriceNode) {
-				oProd.usdprice = usdpriceNode.innerText.replace(/([^0-9])/gi,'');
 			};
 			return oProd;
 		}
@@ -121,4 +108,3 @@
 	}
 	return makeRequest(curPage);
 }());
-
