@@ -7,9 +7,8 @@
 	var XHR;
 	var imgContainer = getImg(document).wrapper;
 	var indImg = document.URL.match(/\d+/)[0];
-	indImg--;
 	var lastImg; // domNode with last image shown
-
+	indImg--;
 	// *** HELPERS *** //
 
 	function bind(domNode, event, handler) {
@@ -68,7 +67,7 @@
 			}
 		}
 		if (!XHR) {
-			alert('Giving up :( Cannot create an XMLHTTP instance');
+			throw 'Giving up :( Cannot create an XMLHTTP instance';
 			return false;
 		}
 		XHR.onreadystatechange = loadImg;
@@ -84,10 +83,11 @@
 	}
 	// function retrieves image from node
 	function getImg(node){
-		var img = node.querySelector('[alt="Cyanide and Happiness, a daily webcomic"]');
+		var img = node.querySelector('#comic-container img');
 		if (!img) {
 			indImg--;
 			makeRequest(genUrl(indImg));
+			console.log(indImg);
 		}
 		return {
 			img:	img,
@@ -97,7 +97,7 @@
 	// function makes request if last image is visible on screen
 	function scrollHandler(event) {
 		var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop;
-		var imgArr = document.querySelectorAll('[alt="Cyanide and Happiness, a daily webcomic"]');
+		var imgArr = document.querySelectorAll('#comic-container img');
 		var windowHeight = document.documentElement.clientHeight;
 		var lastImg = imgArr[imgArr.length-1];
 		if (getOffsetRect(lastImg).top < (scrollTop + windowHeight)){
