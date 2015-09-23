@@ -5,7 +5,7 @@
  */
 	function addClass(node, className) {
 		var classArr = [];
-		var nodeClassName = node.className || node.getAttribute('class') || '';
+		var nodeClassName = node.className || '';
 		if (node && Object.prototype.toString.call(className)==="[object String]"){
 			classArr[0]=className; 
 		} else if (node && Object.prototype.toString.call(className)==="[object Array]") {
