@@ -1,7 +1,11 @@
-// Парсинг страниц розетки для извлечения информации о товарах, в данном случае флешек.
+// Парсинг страниц розетки для извлечения доступной информации о товарах, в данном случае флешек.
 // Скрипт запускать с основной страницы категории http://rozetka.com.ua/usb-flash-memory/c80045/
 // Необходимо подождать несколько секунд пока подгрузятся все запросы с остальных страниц
-// upd. 09.09.15
+
+// Rozetka Page Parser
+// Run this script at the category's main page (example: http://rozetka.com.ua/usb-flash-memory/c80045/)
+// This script needs some time to retrieve all the relevant data from other pages
+
 (function(){
 	'use strict'
 	var next = (function() {
