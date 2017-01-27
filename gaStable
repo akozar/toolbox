@@ -1,0 +1,5 @@
+window.gaStable = function () {
+    if (typeof ga === "function") {
+        ga.apply(undefined, arguments);
+    }
+};
