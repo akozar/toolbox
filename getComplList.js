@@ -33,6 +33,7 @@
 	var maxPage = getMaxPage();
 	var curPage = 0;
 	var prodList = [];
+	var mainPageURL = document.URL;
 
 	function getMaxPage (){
 		var paginatorEl = document.querySelectorAll('.paginator-catalog-l-link');
@@ -40,12 +41,15 @@
 		return Number(lastPage);
 	}
 
-	function genUrl (curPage){
-		if (maxPage!==1 && curPage === 0) {
-			return document.URL;
-		} else if (maxPage!==1) {
-			return (document.URL+'page='+(curPage+1));
+	function genUrl (curPage){		
+		var newURL;
+		if (maxPage!==1 && curPage === 0) {			
+			newURL = document.URL;
+		} else if (maxPage!==1) {			
+			newURL = (mainPageURL+'page='+(curPage+1));
 		} 
+		console.log ('[' + curPage + '/' + maxPage + '] Processing: ' + newURL);
+		return newURL;
 	}
 
 	function makeRequest(url) {
@@ -101,6 +105,10 @@
 					var divWrapper = document.createElement('div');
 					divWrapper.innerHTML = XHR.responseText;
 					getProdInf(divWrapper);
+					if (curPage !== 0 && curPage % 10 == 0) {
+						console.log('Current product list: ');
+						console.log(prodList);
+					}
 					if (curPage<maxPage){
 						curPage+=1;
 						makeRequest(genUrl(curPage));
@@ -110,5 +118,5 @@
 				}
 			}
 	}
-	return makeRequest(curPage);
+	return makeRequest(genUrl(curPage));
 }());
